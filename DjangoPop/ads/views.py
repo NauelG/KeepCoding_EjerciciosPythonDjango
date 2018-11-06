@@ -1,7 +1,11 @@
-from django.http.response import HttpResponse
+from django.shortcuts import render
+from ads.models import Ad
 
 
-def hello_world(request):
-    name = request.GET.get('name', 'Unknown user')
-    age = request.GET.get('age', 'Unknown age')
-    return HttpResponse('Hello {0}! {0} is {1}'.format(name, age))
+def home(request):
+    # 1) Obtener los anuncios de la BBDD
+    ads_list = Ad.objects.all()
+
+    # 2) Pasar los anuncios a la plantilla para que los renderize en HTML
+    contex = {'ads': ads_list}
+    return render(request, 'ads/home.html', contex)
