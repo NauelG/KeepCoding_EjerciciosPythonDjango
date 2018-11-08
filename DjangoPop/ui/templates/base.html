@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block "head_title" %} Django POP {% endblock %}</title>
+    <style>
+        .ad { display: inline-block }
+        .ad img { height: 250px }
+        .ad strong { display: block }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="{% url 'home' %}">HOME</a>
+    </nav>
+
+    <hr>
+
+    <h1>{% block "main_title" %} {% endblock %}</h1>
+
+    <main>
+        {% block "main_body" %} {% endblock %}
+    </main>
+
+    <footer>
+        Django POP. All rights reserved &copy; {% now 'Y' %}.
+    </footer>
+</body>
+</html>
