@@ -15,7 +15,7 @@ def home(request):
 def ad_detail(request, ad_pk):
     # 1) Obtener el ad de la BBDD
     try:
-        ad = Ad.objects.get(pk=ad_pk).select_related('owner')
+        ad = Ad.objects.select_related('owner').get(pk=ad_pk)
         context = {'ad': ad}
         return render(request, 'ads/ad_detail.html', context)
     except Ad.DoesNotExist:
