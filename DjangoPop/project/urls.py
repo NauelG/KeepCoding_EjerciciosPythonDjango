@@ -18,12 +18,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 
-from ads.views import home, ad_detail
-from users.views import login
+from ads.views import home, ad_detail, new_ad
+from users.views import login, logout, register
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ads/<int:ad_pk>', ad_detail, name='ad_detail'),
+    path('ads/new', new_ad, name='new_ad'),
+
     path('login', login, name='login'),
+    path('logout', logout, name='logout'),
+    path('register', register, name='register'),
+
     path('', home, name='home')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
