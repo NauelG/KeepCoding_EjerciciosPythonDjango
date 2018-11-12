@@ -151,3 +151,6 @@ MEDIA_URL = '/uploads/'
 #         }
 #     }
 # }
+
+# LOGIN URL
+LOGIN_URL = 'login'
