@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{%  block head_title %} Login {% endblock %}
+{% block main_title %} Login {% endblock %}
+{% block main_body %}
+
+    <form method="post" autocomplete="off">{% csrf_token %}
+        <div>
+            Username
+            <input type="text" name="form_username" placeholder="Your Username">
+        </div>
+        <div>
+            Password
+            <input type="password" name="form_password" placeholder="Your Password">
+        </div>
+        <button type="submit">Login</button>
+    </form>
+{%  endblock %}
