@@ -4,12 +4,16 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as login_user_in_django, logout as finish_user_session
 
 # Create your views here.
+from django.views.generic.base import View
+
 from users.forms import RegisterForm
 
+class LoginView(View):
 
-def login(request):
+    def get(self, request):
+        return render(request, 'users/login.html')
 
-    if request.method == 'POST':
+    def post(self, request):
         username = request.POST.get('form_username')
         password = request.POST.get('form_password')
         user = authenticate(request, username=username, password=password)
@@ -19,16 +23,22 @@ def login(request):
             login_user_in_django(request, user)
             welcome_url = request.GET.get('next', 'home')
             return redirect(welcome_url)
+        return render(request, 'users/login.html')
 
-    return render(request, 'users/login.html')
+class LogoutView(View):
 
-def logout(request):
-    finish_user_session(request)
-    messages.success(request, 'You have been logged out successfully!')
-    return redirect('login')
+    def get(self, request):
+        finish_user_session(request)
+        messages.success(request, 'You have been logged out successfully!')
+        return redirect('login')
 
-def register(request):
-    if request.method == 'POST':
+class RegisterView(View):
+
+    def get(self, request):
+        form = RegisterForm()
+        return render(request, 'users/register.html', {'form': form})
+
+    def post(self, request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             new_user = User()
@@ -40,8 +50,4 @@ def register(request):
             new_user.save()
             messages.success(request, 'User registered successfully!')
             form = RegisterForm()
-        # TODO Procesar el formulario
-    else:
-        form = RegisterForm()
-
-    return render(request, 'users/register.html', {'form': form})
+        return render(request, 'users/register.html', {'form': form})
