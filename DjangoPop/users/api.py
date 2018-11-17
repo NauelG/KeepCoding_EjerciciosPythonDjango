@@ -23,9 +23,18 @@ class UsersListAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+
+
 class UserDetailAPIView(APIView):
 
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
         serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = UserSerializer(data=request.data, instance=user)
+        serializer.is_valid(raise_exception=True) # Devuelve una respuesta 400 Bad Request con los Errores de validacion
+        serializer.save()
         return Response(serializer.data)
