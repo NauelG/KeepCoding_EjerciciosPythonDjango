@@ -38,3 +38,8 @@ class UserDetailAPIView(APIView):
         serializer.is_valid(raise_exception=True) # Devuelve una respuesta 400 Bad Request con los Errores de validacion
         serializer.save()
         return Response(serializer.data)
+
+    def delete(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
