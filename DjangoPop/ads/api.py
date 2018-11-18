@@ -1,12 +1,12 @@
 from rest_framework import status
-from rest_framework.generics import get_object_or_404
+from rest_framework.generics import get_object_or_404, ListCreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ads.models import Ad
 from ads.serializers import AdListSerializer, AdSerializer
 
-
+""" Clase de la API hecha de manera tradicional
 class AdListAPIView(APIView):
 
     def get(self, request):
@@ -19,6 +19,15 @@ class AdListAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+"""
+
+# Heredando de ListCreateAPIView
+class AdListAPIView(ListCreateAPIView):
+
+    queryset = Ad.objects.all()
+
+    def get_serializer_class(self):
+        return AdListSerializer if self.request.method == 'GET' else AdSerializer
 
 class AdDetailAPIView(APIView):
 
