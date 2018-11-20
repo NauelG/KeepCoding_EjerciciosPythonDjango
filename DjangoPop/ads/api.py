@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ads.models import Ad
+from ads.permissions import AdPermission
 from ads.serializers import AdListSerializer, AdSerializer
 
 
@@ -61,4 +62,4 @@ class AdDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-
+    permission_classes = [AdPermission]
