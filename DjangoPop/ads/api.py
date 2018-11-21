@@ -1,8 +1,6 @@
-from rest_framework import status
-from rest_framework.generics import get_object_or_404, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad
 from ads.permissions import AdPermission
@@ -25,6 +23,7 @@ class AdListAPIView(APIView):
 """
 
 # Heredando de ListCreateAPIView Hace lo mismo que el comentario anterior
+"""
 class AdListAPIView(ListCreateAPIView):
 
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -34,6 +33,22 @@ class AdListAPIView(ListCreateAPIView):
 
     def get_serializer_class(self):
         return AdListSerializer if self.request.method == 'GET' else AdSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+"""
+
+# Pasamos la clase anterior a model view set
+class AdViewSet(ModelViewSet):
+
+    queryset = Ad.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly, AdPermission]
+
+    def get_queryset(self):
+        return self.queryset if self.request.user.is_authenticated else self.queryset.filter(status=Ad.PUBLISHED)
+
+    def get_serializer_class(self):
+        return AdListSerializer if self.action == 'list' else AdSerializer
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -60,8 +75,10 @@ class AdDetailAPIView(APIView):
 """
 
 # Hace lo mismo que el comentario anterior
+"""QUEDA INCLUIDO EN EL ADVIEWSET
 class AdDetailAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
     permission_classes = [AdPermission]
+"""
